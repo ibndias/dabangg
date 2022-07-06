@@ -28,7 +28,7 @@ then
     baseline_threshold=$2
 fi
 
-rm -f aes_$1_accuracy.csv aes_${baseline}accuracy.csv
+rm -f aes_$1_accuracy.csv aes_${baseline}_accuracy.csv
 
 echo "${ITERS[@]}" >> aes_$1_accuracy.csv
 echo "${ITERS[@]}" >> aes_${baseline}_accuracy.csv

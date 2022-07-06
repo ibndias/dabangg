@@ -5,7 +5,7 @@ all: dff dfr server dabangg_noise
 dff: dff.cpp
 	g++ -I${SSL_INCLUDE} -L${SSL_LIB} -pthread -o $@ $@.cpp  -lcrypto
 dfr: dfr.cpp
-	g++ -I${SSL_INCLUDE} -L${SSL_LIB} -pthread -o $@ $@.cpp -lcrypto
+	g++ -g -I${SSL_INCLUDE} -L${SSL_LIB} -pthread -o $@ $@.cpp -lcrypto
 server: server.cpp
 	g++ -I${SSL_INCLUDE} -L${SSL_LIB} -o $@ $@.cpp -lcrypto
 dabangg_noise: noise.cpp

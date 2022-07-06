@@ -28,7 +28,7 @@ int set_affinity(long thread_id, int cpu_id){
     cpu_set_t mask;
     CPU_ZERO(&mask);
     CPU_SET(cpu_id,&mask);
-    pthread_setaffinity_np(thread_id,sizeof(cpu_set_t),&mask);
+    return pthread_setaffinity_np(thread_id,sizeof(cpu_set_t),&mask);
 }
 
 int hogcpu ()

