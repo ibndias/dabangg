@@ -34,6 +34,8 @@ with open('computed_keys.'+sys.argv[1],'r') as file:
 
 acc = []
 for key in source_keys:
-    acc.append(100*(1-(levenshtein(key, t)/32)))
+    ls = float (levenshtein(key, t))
+    acc.append(100*(1-(ls/32)))
+    #print(100*(1-(ls/32)))
 
 print("{:.2f}".format(np.average(acc)))
